@@ -16,11 +16,11 @@ const App = () => {
 
   useEffect(()=>{
     checkAuth()
-  },[])
+  },[checkAuth])
 
   console.log({authUser});
 
-  if(true){
+  if(isCheckingAuth && !authUser){
     <div className='flex items-center justify-center h-screen'>
       {/* <span className="loading loading-ring loading-xl"></span> */}
       <Loader className='size-10 animate-spin' />

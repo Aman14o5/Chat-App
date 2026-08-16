@@ -123,7 +123,6 @@ export const logout = (req, res) => {
 export const updateProfile = async (req, res) => {
     const {fullName,email,profilePic} = req.body;
     try{
-        const { profilePic } = req.body;
         const userId = req.user._id;
 
         if(!profilePic){
@@ -132,12 +131,13 @@ export const updateProfile = async (req, res) => {
             })
         }
 
-        const uploadedResponse = await cloudinary.uploader.upload(profilePic);
-        const updatedUser = await User.findByIdAndUpdate(usedId,{profilePic: uploadedResponse.secure_url},{new:true});
+        const uploadedResponse = await cloudinary.uploader.upload(profilePic,{
+            resource_type:"image",
+        });
+        const updatedUser = await User.findByIdAndUpdate(userId,{profilePic: uploadedResponse.secure_url},{new:true});
 
         return res.status(200).json(updatedUser);
     }catch(error){
-        console.error("Error in updateProfile controller", error.message);
         return res.status(500).json({
             message:"Internal server error"
         });
